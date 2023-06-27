@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .calendar {
+      display: inline-block;
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    td {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calendar</h1>
+  <label for="year">Enter a year:</label>
+  <input type="number" id="year" placeholder="Year" min="1900" max="2100">
+  <button onclick="generateCalendar()">Generate</button>
+  <div id="calendarContainer"></div>
+
+  <script>
+    function generateCalendar() {
+      var yearInput = document.getElementById('year');
+      var year = yearInput.value;
+
+      if (year) {
+        var calendarContainer = document.getElementById('calendarContainer');
+        calendarContainer.innerHTML = '';
+
+        var months = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        for (var i = 0; i < months.length; i++) {
+          var month = i + 1;
+          var daysInMonth = new Date(year, month, 0).getDate();
+          var firstDay = new Date(year, i, 1).getDay();
+
+          var table = document.createElement('table');
+          var caption = document.createElement('caption');
+          caption.textContent = months[i] + ' ' + year;
+          table.appendChild(caption);
+
+          var headerRow = document.createElement('tr');
+          var daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+          for (var j = 0; j < daysOfWeek.length; j++) {
+            var headerCell = document.createElement('th');
+            headerCell.textContent = daysOfWeek[j];
+            headerRow.appendChild(headerCell);
+          }
+          table.appendChild(headerRow);
+
+          var date = 1;
+          for (var row = 0; row < 6; row++) {
+            var tableRow = document.createElement('tr');
+            for (var col = 0; col < 7; col++) {
+              if (row === 0 && col < firstDay) {
+                var tableCell = document.createElement('td');
+                tableRow.appendChild(tableCell);
+              } else if (date > daysInMonth) {
+                break;
+              } else {
+                var tableCell = document.createElement('td');
+                tableCell.textContent = date;
+                tableRow.appendChild(tableCell);
+                date++;
+              }
+            }
+            table.appendChild(tableRow);
+          }
+          calendarContainer.appendChild(table);
+        }
+      } else {
+        alert('Please enter a valid year!');
+      }
+    }
+  </script>
+</body>
+</html>
